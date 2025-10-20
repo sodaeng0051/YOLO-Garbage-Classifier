@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+.vscode/
+
+# Project Specific Files
+garbage_guide.db        # DB 파일은 코드가 재생성하므로 제외
+*.log
+*.tmp
+
+# YOLO/CV Output
+static/uploads/         # 업로드 임시 파일 제외
+static/images/results/  # 분석 결과 이미지 제외
