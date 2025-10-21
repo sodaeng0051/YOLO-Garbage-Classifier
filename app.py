@@ -19,7 +19,7 @@ app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER
 
 # 2. 모델 로드 및 DB 연결 테스트
 try:
-    # YOLOv8 모델 로드 (추가 학습 모델 가산점 3점)
+    # YOLOv8 모델 로드
     yolo_model = YOLO(YOLO_MODEL_PATH)
     print("--- YOLOv8 모델 로드 완료 ---")
     
@@ -40,8 +40,6 @@ except Exception as e:
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-# app.py 파일 수정
 
 def get_guide_info(class_name):
     """DB에서 쓰레기 종류별 분리수거 가이드 정보를 가져옵니다."""
@@ -94,7 +92,7 @@ def analyze_garbage_image(image_path):
             # ----------------------------------------------
             
             # 2. 결과 시각화
-            color = (255, 0, 0) # BGR: Blue
+            color = (255, 0, 0) 
             cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
             
             text = f"{class_name}"

@@ -5,16 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YOLO 쓰레기 분류 가이드 서비스</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f0fff0; }
-        .container { max-width: 1100px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); }
-        h1 { text-align: center; color: #1a7d3c; }
-        .upload-section { margin-bottom: 30px; padding: 20px; border: 3px dashed #a3d9b4; border-radius: 8px; text-align: center; background: #e6ffe6; }
-        .results-section { margin-top: 30px; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px;}
-        .image-display { max-width: 45%; min-width: 300px; }
-        .image-display img { max-width: 100%; height: auto; border: 2px solid #28a745; border-radius: 6px; }
-        .guide-box { margin-top: 20px; width: 45%; min-width: 300px; }
-        .guide-item { border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 5px; background: #fff; }
-        .guide-item h4 { color: #1a7d3c; margin-top: 0; border-bottom: 2px solid #28a745; padding-bottom: 5px; }
+        body { font-family: Arial, 
+                    sans-serif; 
+                    margin: 20px; 
+                    background-color: #f0fff0; 
+                }
+        h1 { text-align: center; 
+            color: #1a7d3c; 
+            }
+        .container { max-width: 1100px; 
+                            margin: auto; 
+                            background: white; 
+                            padding: 25px;
+                            border-radius: 10px; 
+                            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); 
+                        }
+        .upload-section { margin-bottom: 30px; 
+                                    padding: 20px; 
+                                    border: 3px dashed #a3d9b4; 
+                                    border-radius: 8px; 
+                                    text-align: center; 
+                                    background: #e6ffe6; 
+                                }
+        .results-section { margin-top: 30px; 
+                                    display: flex; 
+                                    justify-content: space-around; 
+                                    flex-wrap: wrap; 
+                                    gap: 30px;
+                                }
+        .image-display { max-width: 45%; 
+                                    min-width: 300px; 
+                                }
+        .image-display img { max-width: 100%; 
+                                            height: auto; 
+                                            border: 2px solid #28a745; 
+                                            border-radius: 6px; 
+                                        }
+        .guide-box { margin-top: 20px; 
+                            width: 45%; 
+                            min-width: 300px; 
+                            }
+        .guide-item { border: 1px solid #ccc; 
+                            padding: 15px; 
+                            margin-bottom: 15px; 
+                            border-radius: 5px; 
+                            background: #fff; 
+                            }
+        .guide-item h4 { color: #1a7d3c; 
+                                    margin-top: 0; 
+                                    border-bottom: 2px solid #28a745; 
+                                    padding-bottom: 5px; 
+                                    }
         .guide-item strong { color: #28a745; }
     </style>
 </head>
@@ -22,18 +63,21 @@
     <div class="container">
         <h1>♻️ YOLO 쓰레기 종류 분류 및 분리수거 가이드 ♻️</h1>
         <p style="text-align: center; font-size: 1.1em; color: #444;">
-            <span style="color: #28a745;">데이터 입력 (이미지 업로드)</span> &rarr; 
-            <span style="color: #1a7d3c;">딥러닝 추론 (YOLOv8 기반 객체 탐지 및 분류)</span> &rarr; 
-            <span style="color: #007bff;">분석 결과 출력 (시각화 및 DB 가이드 연동)</span>
+            <span style="color: #28a745;"><b>데이터 입력 (이미지 업로드) </b></span>
+            <span style="color:000000"> ➔ </span>
+            <span style="color: #1a7d3c;"><b>딥러닝 추론 (YOLOv8 기반 객체 탐지 및 분류) </b></span>
+            <span style="color:000000"> ➔ </span>
+            <span style="color: #008080;"><b>분석 결과 출력 (시각화 및 DB 가이드 연동)</b></span>
         </p>
         <div class="upload-section">
-            <h2>STEP 1. 쓰레기 이미지 업로드 (입력)</h2>
+            <h3>STEP 1. 쓰레기 이미지 업로드 (입력)</h3>
             <form method="POST" enctype="multipart/form-data">
                 <input type="file" name="file" accept="image/*" required>
-                <button type="submit" style="padding: 12px 12px; background-color: #28a745; color: white; 
-                border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">분석 및 가이드 받기</button>
+                <button type="submit" style="padding: 8px 10px; background-color: #228B22; color: white; 
+                border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">
+                <b>분석 및 가이드 받기</b>
+                </button>
             </form>
-            <p style="margin-top: 15px; color: #555;">(YOLOv8 모델은 캔, 플라스틱, 종이, 유리 등을 분류하도록 커스텀 학습되어야 합니다.)</p>
         </div>
 
         {% if result_img %}
@@ -51,7 +95,7 @@
                             <h4>탐지된 쓰레기: {{ class_name.upper() }}</h4>
                             <p><strong>분류 항목:</strong> {{ guide.type }}</p>
                             <p><strong>배출 요일:</strong> {{ guide.day }}</p>
-                            <p><strong>✅ 배출 방법:</strong> {{ guide.guide }}</p>
+                            <p><strong>배출 방법:</strong> {{ guide.guide }}</p>
                         </div>
                     {% endfor %}
                 </div>
