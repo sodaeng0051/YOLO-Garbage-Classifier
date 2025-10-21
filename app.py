@@ -1,9 +1,9 @@
-import os
+import os #파일 및 폴더 경로 관리
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
-from ultralytics import YOLO
-import cv2 # OpenCV for drawing
+from ultralytics import YOLO # YOLOv8 모델
+import cv2 # OpenCV : 이미지 처리, 박스 그림
 
 # 1. 환경 설정
 DB_NAME = 'garbage_guide.db'
@@ -11,6 +11,7 @@ UPLOAD_FOLDER = 'static/uploads'
 OUTPUT_FOLDER = 'static/images/results'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 YOLO_MODEL_PATH = 'static/models/best.pt' # Fine-tuned YOLOv8 모델 경로
+# Fine-tuned 모델 : 쓰레기 분류에 최적화
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -45,14 +46,15 @@ def allowed_file(filename):
 def get_guide_info(class_name):
     """DB에서 쓰레기 종류별 분리수거 가이드 정보를 가져옵니다."""
     
-    # --- [수정] DB 조회 전에 클래스 이름을 대문자로 변환하여 통일 ---
+    # --- DB 조회 전에 클래스 이름을 대문자로 변환하여 통일 ---
     db_key = class_name.upper()
     # -----------------------------------------------------------
     
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     # 쿼리 실행 시 db_key 사용
-    cursor.execute("SELECT recycle_guide, recycle_type, collection_day FROM guide WHERE class_name=?", (db_key,))
+    cursor.execute("SELECT recycle_guide, recycle_type, collection_day FROM guide WHERE class_name=?", 
+                   (db_key,))
     result = cursor.fetchone()
     conn.close()
     
@@ -63,7 +65,7 @@ def get_guide_info(class_name):
             'day': result[2]
         }
     
-    # 디버깅을 위해 정보가 없을 경우 로그를 남깁니다.
+    # 디버깅을 위해 정보가 없을 경우 로그를 남김
     print(f"ERROR: DB에서 클래스 [{db_key}]의 정보를 찾을 수 없습니다.")
     return None
 
@@ -72,7 +74,7 @@ def analyze_garbage_image(image_path):
     
     # 1. YOLOv8 객체 탐지 및 분류
     # YOLOv8은 탐지(detection)와 분류(classification)를 동시에 수행
-    results = yolo_model(image_path, conf=0.5, verbose=False)
+    results = yolo_model(image_path, conf=0.5, verbose=False) # conf=0.5 : 신뢰도 0.5 이상의 객체만 탐지
     
     img = cv2.imread(image_path)
     analysis_results = []
@@ -87,11 +89,11 @@ def analyze_garbage_image(image_path):
             class_name = yolo_model.names[int(cls)]
             detected_classes.add(class_name)
 
-            # --- [추가] DB 조회 직전에 클래스 이름 확인 ---
+            # --- DB 조회 직전에 클래스 이름 확인 ---
             print(f"DEBUG: YOLO 모델이 탐지한 클래스 이름: {class_name}")
             # ----------------------------------------------
             
-            # 2. 결과 시각화 (이미지 입출력 가산점 3점)
+            # 2. 결과 시각화
             color = (255, 0, 0) # BGR: Blue
             cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
             
@@ -130,7 +132,7 @@ def index():
             return redirect(request.url)
 
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            filename = secure_filename(file.filename) # 파일명 검증
             upload_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(upload_path)
 

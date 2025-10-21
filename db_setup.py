@@ -1,10 +1,11 @@
-import sqlite3
+import sqlite3  # DB 연동 라이브러리
 import json
 
-DB_NAME = 'garbage_guide.db'
+DB_NAME = 'garbage_guide.db' #실행 시 생성되는 DB 파일명
 
 # 쓰레기 분류 클래스와 분리수거 가이드 정보
 GUIDE_DATA = {
+    # YOLOv8 모델이 탐지하는 이름 라벨
     "CAN": {
         "guide": "내용물을 비우고 물로 헹군 후, 압축하여 배출합니다. 부탄가스 등은 구멍을 뚫어 내용물을 완전히 비웁니다.",
         "type": "고철/캔류",
@@ -27,12 +28,14 @@ GUIDE_DATA = {
     }
 }
 
+#메인 로직
 def create_db():
-    """SQLite 데이터베이스를 생성하고 가이드 정보를 입력합니다."""
-    conn = sqlite3.connect(DB_NAME)
+    """SQLite 데이터베이스를 생성하고 가이드 정보를 입력"""
+    conn = sqlite3.connect(DB_NAME) 
     cursor = conn.cursor()
 
     # 테이블 생성
+    # 테이블명 : guide
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS guide (
             class_name TEXT PRIMARY KEY,
@@ -53,5 +56,6 @@ def create_db():
     conn.close()
     print(f"--- SQLite DB ({DB_NAME}) 및 쓰레기 가이드 정보 구축 완료 ---")
 
+# 실행 될 부분
 if __name__ == '__main__':
     create_db()
