@@ -103,7 +103,9 @@ def analyze_garbage_image(image_path):
             
             analysis_results.append({
                 'class': class_name,
-                'guide_info': guide_info if guide_info else {"guide": "분리수거 정보 없음", "type": "기타", "day": "-"},
+                'guide_info': guide_info 
+                                if  guide_info else 
+                                    {"guide": "분리수거 정보 없음", "type": "기타", "day": "-"},
                 'box': (x1, y1, x2, y2)
             })
 
