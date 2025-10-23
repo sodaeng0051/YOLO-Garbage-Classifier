@@ -2,7 +2,7 @@ import os #파일 및 폴더 경로 관리
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
-from ultralytics import YOLO # YOLOv8 모델
+from ultralytics import YOLO # YOLOv5 모델
 import cv2 # OpenCV : 이미지 처리, 박스 그림
 
 # 1. 환경 설정
@@ -29,7 +29,7 @@ try:
     print("--- SQLite DB 연결 확인 완료 ---")
 
 except FileNotFoundError:
-    print("--- [오류]: 모델 파일 (best.pt) 또는 DB 파일 (garbage_guide.db)이 없습니다. ---")
+    print("--- [오류]: 모델 파일 (best.pt) 또는 DB 파일 (garbage_guide.db) X ---")
     print("--- 1. YOLOv8 모델을 학습하거나 다운로드하여 'static/models/best.pt'에 저장하세요. ---")
     print("--- 2. 'db_setup.py'를 먼저 실행하여 DB를 생성하세요. ---")
     exit(1)
